@@ -1,23 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+import SearchBox from "./components/SearchBox";
+import Table from "./components/Table";
+import { calculateFrequencies, fetchData, sanitizeString } from "./helpers";
 
 function App() {
+  const [isLoading, setLoading] = useState(false);
+  const [tableData, setTableData] = useState([]);
+
+  const handleClick = async (number) => {
+    setLoading(true);
+    setTimeout(async () => {
+      let data = await fetchData(
+        "https://raw.githubusercontent.com/invictustech/test/main/README.md"
+      );
+      data = sanitizeString(data);
+      setTableData(calculateFrequencies(data).splice(0, number));
+      setLoading(false);
+    }, 5000);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <SearchBox handleClick={handleClick} isLoading={isLoading} />
+      {tableData.length > 0 && <Table tableData={tableData} />}
     </div>
   );
 }
