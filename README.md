@@ -65,7 +65,7 @@
 
   ```
 
-- After this handleClick function in app.js will be called, which calls fetchData function (defined in src/helpers/index.js) which return text found on the url then sanitizeString function is called which replaces '-' '.' ',' with a space and replace any double space with single space. So that the words can be seperated from , or . or - and these characters doesn't count as words. Then split the whole text into words based on spaces and Remove any space after spliting, if any. and return the array of words.
+- After this handleClick function in app.js will be called, which calls fetchData function (defined in src/helpers/index.js) which return text found on the url then sanitizeString function is called which converts the whole string to lower case and then replaces '-' '.' ',' with a space and replaces any double space with single space. So that the words can be seperated from , or . or - and these characters doesn't count as words. Then split the whole text into words based on spaces and Remove any space after spliting, if any. and return the array of words.
 
   ```sh
   const sanitizeString = (data) => {
