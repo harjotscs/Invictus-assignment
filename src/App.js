@@ -10,14 +10,12 @@ function App() {
 
   const handleClick = async (number) => {
     setLoading(true);
-    setTimeout(async () => {
-      let data = await fetchData(
-        "https://raw.githubusercontent.com/invictustech/test/main/README.md"
-      );
-      data = sanitizeString(data);
-      setTableData(calculateFrequencies(data).splice(0, number));
-      setLoading(false);
-    }, 5000);
+    let data = await fetchData(
+      "https://raw.githubusercontent.com/invictustech/test/main/README.md"
+    );
+    data = sanitizeString(data);
+    setTableData(calculateFrequencies(data).splice(0, number));
+    setLoading(false);
   };
 
   return (
