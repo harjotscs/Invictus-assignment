@@ -10,7 +10,7 @@ const SearchBox = (props) => {
         value={number}
         placeholder="Enter a number "
         onChange={(event) => {
-          const num = Math.abs(event.target.value);
+          const num = Math.abs(event.target.value) || "";
           setNumber(num);
         }}
         name="searchKey"
