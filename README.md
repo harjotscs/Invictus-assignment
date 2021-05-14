@@ -1,70 +1,185 @@
-# Getting Started with Create React App
+<p align="center">
+  <a href="https://github.com/harjotscs/Invictus-assignment">
+    <img src="public\logo512.png" alt="Logo" width="80" height="80">
+  </a>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+  <h3 align="center">Invictus Assignment</h3>
 
-## Available Scripts
+  <p align="center">
+    The project is implemented using React js library without using any add-on dependency.
+    <br />
+    <a href="#about-the-project"><strong>Read More »</strong></a>
+    <br />
+    <br />
+    <a href="https://harjot-invictus.netlify.app/">View App Demo</a>
+  </p>
+</p>
 
-In the project directory, you can run:
+<!-- TABLE OF CONTENTS -->
+<details open="open">
+  <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#testcases">Test Cases</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ol>
+</details>
 
-### `npm start`
+<!-- ABOUT THE PROJECT -->
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## About The Project
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- The Styling in the frontend is done with CSS from scratch, no external CSS library/framework is used.
+- The Web App is split into two main components SearchBox and Table
 
-### `npm test`
+- After entering the the value of N in the Input Box, If N is negative number it will be automatically converted to positive number using Math.abs() function.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+  ```sh
+   onChange={(event) => {
+          const num = Math.abs(event.target.value);
+          setNumber(num);
+        }}
 
-### `npm run build`
+  ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- On clicking submit if no number or 0 is entered, It will send an alert "Please Enter A Valid Number First" else a spinner will be shown on the button and handleClick function will be called.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+  ```sh
+   onClick={() => {
+          number === "" || number === 0
+            ? alert("Please Enter A Valid Number First")
+            : handleClick(number);
+        }}
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+  ```
 
-### `npm run eject`
+- After this handleClick function in app.js will be called, which calls fetchData function (defined in src/helpers/index.js) which return text found on the url then sanitizeString function is called which replaces '-' '.' ',' with a space and replace any double space with single space. So that the words can be seperated from , or . or - and these characters doesn't count as words. Then split the whole text into words based on spaces and Remove any space after spliting, if any. and return the array of words.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+  ```sh
+  const sanitizeString = (data) => {
+    const regex = /[-.,]/g;
+    data = data
+      .toLowerCase()
+      .replace(/\s+/g, " ")
+      .replace(regex, "")
+      .split(" ")
+      .filter((word) => word.trim().length > 0);
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+    return data;
+  };
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+  ```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- Then control comes back to handleClick function where it proceeds with calculateFrequencies function to calculate the frequency of all the words and return the array of frequencies of all words in descending order back to handleClick where it splices the array to the entered number(N) and update the initial state of table data with the help of useState hook.
 
-## Learn More
+  ```sh
+  const calculateFrequencies = (words) => {
+    var freq = {};
+    words.forEach((word) => {
+      if (!freq[word]) {
+        freq[word] = 0;
+      }
+      freq[word] += 1;
+    });
+    const computed = Object.entries(freq).sort((a, b) => b[1] - a[1]);
+    return computed;
+  };
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+  //inside app.js
+  setTableData(calculateFrequencies(data).splice(0, number));
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+  ```
 
-### Code Splitting
+- This data is passed as props to the Table.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+  ```sh
+  <Table tableData={tableData}/>
+  ```
 
-### Analyzing the Bundle Size
+### Built With
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- [React.Js](https://reactjs.org/)
 
-### Making a Progressive Web App
+<!-- GETTING STARTED -->
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Getting Started
 
-### Advanced Configuration
+To get a local copy up and running follow these simple steps.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Prerequisites
 
-### Deployment
+- Make sure you have node js installed on your system.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Installation
 
-### `npm run build` fails to minify
+1. Clone the repo
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+   ```sh
+   git clone git@github.com:harjotscs/Invictus-assignment.git
+   ```
+
+2. Install NPM packages enter below command on the terminal
+
+   ```sh
+   npm install
+   ```
+
+3. To run thd app enter below command on the terminals
+
+   ```sh
+   npm start
+   ```
+
+<!-- Testcases -->
+
+## Testcases
+
+1. Testcase 1:
+
+- Data: 4
+- Output:
+
+[![Invictus Frontend ScreenShot][1]](https://harjot-invictus.netlify.app/)
+
+2. Testcase 2:
+
+- Data: 6
+- Output:
+
+[![Invictus Frontend ScreenShot][2]](https://harjot-invictus.netlify.app/)
+
+3. Testcase 3:
+
+- Data: 12
+- Output:
+
+[![Invictus Frontend ScreenShot][3]](https://harjot-invictus.netlify.app/)
+
+_Screenshots of all testcases are in [testcases folder](testcases)_
+
+<!-- CONTACT -->
+
+## Contact
+
+Harjot Singh - harjotscs@gmail.com
+
+Project Link: [https://github.com/harjotscs/Invictus-assignment](https://github.com/harjotscs/Invictus-assignment)
+
+<!-- MARKDOWN LINKS & IMAGES -->
+
+[1]: testcases/1.png
+[2]: testcases/2.png
+[3]: testcases/3.png
+[4]: testcases/4.png
